@@ -1,0 +1,147 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block style %}
+<style>
+    td img {
+        max-width: 60px;
+        max-height: 60px;
+        margin: 3px;
+    }
+
+    tr:hover {
+        background-color: #fe9adb;
+    }
+</style>
+{% endblock %}
+
+
+
+
+{% block body %}
+<br>
+<div class="container rounded" style="background-color: #ddffe0;">
+    <div class="form-inline d-flex justify-content-between py-2">
+        <form method="POST" class="form-inline">
+          {% csrf_token %}
+            <div class="input-group">
+              {{form.name}}
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">Go</button>
+              </div>
+           </div>
+        </form>
+        <a class="btn btn-success" href="{% url 'pro_create' %}">Create</a>
+    </div>
+
+    <table class="table">
+        <thead>    
+          <tr>
+            <th class="bg-danger">สินค้าทั้งหมด {{count}} รายการ</th>
+            
+            {% for pl in prolabel %}
+                <th scope="col">{{pl.label}}</th>
+            {% endfor %}
+                
+            <!-- <th scope="col">{{prolabel.id.label}}</th>
+            <th scope="col">{{prolabel.name.label}}</th>
+            <th scope="col">{{prolabel.price.label}}</th>
+            <th scope="col">{{prolabel.stock.label}}</th> -->
+          </tr>
+        </thead>
+        <tbody>
+
+                {% for p in page %}
+                {% with images=p.id|GetImages %}
+                
+                
+                <tr>
+                    <td style="width:200px">
+                        <a class="btn btn-primary" href="{% url 'pro_update' id=p.id pg=page.number %}"><i class="far fa-edit"></i></a>
+                        |
+                        <a class="btn btn-danger" href="javascript:del('{% url 'pro_delete' id=p.id %}')">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                
+                        <script>
+                            function del(url) {
+                                swal({
+                                    title: "Are you sure?",
+                                    text: "Once deleted, you will not be able to recover this imaginary file!",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                })
+                                    .then((willDelete) => {
+                                        if (willDelete) {
+                                            document.location = url;
+                                        }
+                                    });
+                            }
+                        </script>
+                    </td>
+
+
+
+
+             <th scope="row">{{p.id}}</th>
+             <td>{{p.name}}</td>
+             <td>{{p.price}}</td>
+             <td>{{p.stock}}</td>
+             <td> 
+                
+                {% for img in images %}
+                <img src="{{ img.image_file.url }}" class="rounded">
+                {% endfor %}
+                
+             </td>
+           </tr>
+            {% endwith %}
+            {% endfor %}       
+        </tbody>
+    </table>
+
+
+    <div class="mt-4 text-center">
+        <div class="mb-2">หน้า: {{ page.number }} </div>
+        <ul class="mt-4 pagination justify-content-center">
+        {% if page.number != 1 %}
+        <li class="page-item">
+        
+        <a class="page-link bg-
+        warning" href="{% url 'pro_management' pg=1 %}">หน้าแรก</a>
+        
+        </li>
+        {% endif %}
+        {% if page.has_previous %}
+        <li class="page-item">
+        <a class="page-link bg-warning"
+        href="{% url 'pro_management' pg=page.previous_page_number %}"
+        >หน้าที่แล้ว</a>
+        </li>
+        {% endif %}
+        {% if page.has_next %}
+        <li class="page-item">
+        
+        <a class="page-link bg-
+        warning" href="{% url 'pro_management' pg=page.next_page_number %}">หน้าถัดไป</a>
+        
+        </li>
+        {% endif %}
+        {% if page.number != page.paginator.num_pages %}
+        <li class="page-item">
+        
+        
+        <a class="page-link bg-warning"
+        href="{% url 'pro_management' pg=page.paginator.num_pages %}">
+        หน้าสุดท้าย</a>
+        </li>
+        {% endif %}
+        </ul>
+        </div>
+
+
+
+<div>
+{% endblock body %}

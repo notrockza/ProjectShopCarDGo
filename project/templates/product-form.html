@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<div class="m-auto col-6" style="background-color: khaki;">
+    <form method="post" enctype="multipart/form-data">
+        <h5 class="text-center m-4">กรอกข้อมูลสินค้า</h5>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="py-2">
+            <button class="btn btn-danger" type="button" onclick="formSubmit()">บันทึก</button>
+            <a class="btn btn-secondary" href="{% url 'pro_management' pg %}">ยกเลิก</a>
+        </div>
+
+        <script>
+            var MAX_FILES = 5;
+            function formSubmit() {
+                var el = document.querySelector('[type="file"]');
+                if (el.files.length > MAX_FILES) {
+                    alert('เลือกได้ไม่เกิน ' + MAX_FILES + ' ไฟล์');
+                } else {
+                    document.querySelector('form').submit();
+                }
+            }
+        </script>
+    </form>
+</div>
+{% endblock %}

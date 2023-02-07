@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div class="col-4 m-auto bg-info rounded mt-4">
+        <form method="POST" class="p-2">
+            {% csrf_token %}
+            {{form|crispy}}
+            <div>
+                <button class="btn btn-primary">เข้าระบบ</button>
+                <a type='button' class="btn btn-secondary" href="{% url 'mem_register' %}">ลงทะเบียน</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+    
+
+<div>
+    kimochiiiii
+</div>

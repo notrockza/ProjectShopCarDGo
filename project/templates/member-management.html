@@ -1,0 +1,77 @@
+{% extends 'main.html' %}
+
+
+{% block style %}
+    <style>
+        tr:hover{
+            background-color: aliceblue;
+        }
+    </style>
+{% endblock style %}
+    
+
+{% block body %}
+<br>
+<div class="form-inline d-flex justify-content-between mb-3">
+    <form method="POST" class="form-inline">
+        {% csrf_token %}
+         <div class="input-group">
+           {{form.name}}
+            <div class="input-group-append">
+                <button class="btn btn-success" type="submit">Go</button>
+            </div>
+        </div>
+    </form>
+    <a class="btn btn-success" href="{% url 'mem_create' %}">Create</a>
+</div>
+
+
+
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            
+            <th scope="col">รหัส</th>
+            <th scope="col">ชื่อ-สกุล</th>
+            <th scope="col">อีเมล์</th>
+            <th scope="col">รหัสผ่าน</th>
+            <th>มีสมาชิกทั้งหมด {{count}} คน</th>
+          </tr>
+        </thead>
+        <tbody>{% for p in data %}
+            <tr>
+                <th scope="row">{{p.id}}</th>
+                <td>{{p.firstname}} {{p.lastname}}</td>
+                <td>{{p.email}}</td>
+                <td>{{p.password}}</td>
+                <td>
+                    <a href="{% url 'mem_update' id=p.id %}" class="fas fa-user-edit fs-5"> </a> |
+                    <a href="javascript:del('{% url 'mem_delete' id=p.id %}')" class="fas fa-trash-alt fs-5"> </a>
+
+
+                    <script>
+                        function del(url) 
+                        {swal({
+                                 title: "Are you sure?",
+                                 text: "Once deleted, you will not be able to recover thisimaginary file!",
+                                 icon: "warning",
+                                 buttons: true,
+                        dangerMode: true,
+                        })
+                        .then((willDelete) => {if (willDelete) {document.location = url;} }); } 
+                    </script>
+
+
+
+
+
+                </td>
+
+            </tr>
+
+
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock body %}
